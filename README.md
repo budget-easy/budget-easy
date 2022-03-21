@@ -1,2 +1,2 @@
-# capstone-project-tem-2
+# capstone-project-team-2
 creating an on line marketing budgeting tool
