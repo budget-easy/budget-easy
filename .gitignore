@@ -142,3 +142,8 @@ data/
 
 #DS_Store
 .DS_Store
+
+#Google Ads Login .yaml
+google-ads.yaml
+googleads.yaml
+.yaml
