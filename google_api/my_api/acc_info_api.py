@@ -24,6 +24,7 @@ import sys
 from google.ads.googleads.client import GoogleAdsClient
 from google.ads.googleads.errors import GoogleAdsException
 
+#Input the customer_id for the API Call. Only works with deactivated Parser.
 customer_id ="5651232347"
 
 def main(client, customer_id):
