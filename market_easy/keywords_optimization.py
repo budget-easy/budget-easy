@@ -113,3 +113,48 @@ def clicks_max_3(df, budget):
 
     # return dataframe with the optimal keywords combination
     return df[solution].reset_index(drop=True)
+
+def clicks_max(clicks, costs, budget):
+    """
+    This function calculates the best combination of keywords by maximizing the clicks using a linear solver.
+    """
+    
+    # check if you can take all keywords with the given budget
+    #if df.costs_per_mo.sum() <= budget:
+    #    return print(f'You need a budget of {round(df.costs_per_mo.sum(),2)} Euro to buy all the keywords!')
+
+    # exclude all keywords that exceed the budget
+    #df = df[df['costs_per_mo'] <= budget].reset_index(drop=True)
+    
+    # extracting the indici, clicks and costs from the dataframe
+    indici = list(range(len(clicks)))
+
+    # create a concrete model
+    model = pyo.ConcreteModel()
+
+    # define the VARIABLES (in the end 0=not selected, 1=selected)
+    model.x = pyo.Var(indici, within=pyo.Binary)
+    x = model.x
+
+    # define the CONSTRAINT, the total costs should be less than budget
+    model.weight_constraint = pyo.Constraint(expr= sum([x[p]*costs[p] for p in indici]) <= float(budget))
+
+    # define the OBJECTIVE, we want to maximize the value of the selected keywords
+    model.objective = pyo.Objective(expr= sum([x[p]*clicks[p] for p in indici]), sense=pyo.maximize)
+
+    # print the complete model
+    #model.pprint()
+
+    # call the solver
+    opt = SolverFactory('cbc', executable='/Users/damjan/neuefische/capstone-project-tem-2/cbc-osx/cbc') # replace the executable path by your own
+    results = opt.solve(model)
+
+    # create a list of 0 (not selected keywords) and 1 (selected keywords)
+    solution = [int(pyo.value(model.x[p])) for p in indici]
+
+    # change the 0 and 1 to False and True
+    #solution = [bool(x) for x in solution]
+
+    # return dataframe with the optimal keywords combination
+    #return df[solution].reset_index(drop=True)
+    return solution
