@@ -147,3 +147,9 @@ data/
 google-ads.yaml
 googleads.yaml
 .yaml
+ads_environment.yml
+
+#bing credentials
+refresh.txt
+tokens.yml
+auth_helper.py
