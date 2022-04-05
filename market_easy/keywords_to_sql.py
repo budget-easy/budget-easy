@@ -29,3 +29,13 @@ def to_sql(df):
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
             engine = None
+
+from market_easy.bing_api import get_bing_data
+from market_easy.google_api import get_google_data
+import pandas as pd
+
+def get_data(keyword):
+    """get data from Google and Bing APIs and write it to sql
+    required: keyword(s)"""
+    df = pd.concat([get_google_data(keyword),get_bing_data(keyword)])
+    to_sql(df)

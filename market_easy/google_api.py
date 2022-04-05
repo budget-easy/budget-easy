@@ -138,7 +138,7 @@ def _map_locations_ids_to_resource_names(client, location_ids):
     ).geo_target_constant_path
     return [build_resource_name(location_id) for location_id in location_ids]
 
-def get_data(keyword_texts):
+def get_google_data(keyword_texts):
     """get data from the google API"""
     # GoogleAdsClient will read the google-ads.yaml configuration file in the
     # home directory if none is specified.
