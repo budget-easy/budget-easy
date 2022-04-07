@@ -4,14 +4,16 @@ from market_easy.adinsight_example_helper import *
 import pandas as pd
 from suds.client import Client
 
+import validators
+
 # You must provide credentials in auth_helper.py.
 
-def main(authorization_data, keyword_texts, adinsight_service):
+def main(authorization_data, keyword_texts, adinsight_service, location_ids, page_url):
 
     try:
 
         #Input Keywords as list of strings or URL as string
-        url_query = ''
+        url_query = page_url
         keyword_query = keyword_texts#['banana', 'apples', 'grapes']
 
         # You must specify the attributes that you want in each returned KeywordIdea.
@@ -87,7 +89,12 @@ def main(authorization_data, keyword_texts, adinsight_service):
         languages=adinsight_service.factory.create('ArrayOfLanguageCriterion')
         language=adinsight_service.factory.create('LanguageCriterion')
         # You must specify exactly one language
-        language.Language='English'
+        if location_ids == ['72']:
+             language.Language='German'
+        elif location_ids == ['66']:
+            language.Language='French'
+        else:
+            language.Language='English'
         languages.LanguageCriterion.append([language])
         language_search_parameter.Languages=languages
 
@@ -96,7 +103,7 @@ def main(authorization_data, keyword_texts, adinsight_service):
         # You must specify between 1 and 100 locations
         location=adinsight_service.factory.create('LocationCriterion')
         # United States
-        location.LocationId='190'
+        location.LocationId=location_ids
         locations.LocationCriterion.append([location])
         location_search_parameter.Locations=locations
 
@@ -172,10 +179,18 @@ def main(authorization_data, keyword_texts, adinsight_service):
         output_status_message(ex)
 
 # Main execution
-def get_bing_data(keyword_texts):
+def get_bing_data(keyword_texts, page_url='', location_ids=['190']):
 
     print("Loading the web service client proxies...")
     
+    if (validators.url(keyword_texts)) and (page_url==''):
+        page_url = keyword_texts
+        keyword_texts = ''
+
+    # change location_ids to list
+    if type(location_ids) != list: 
+        location_ids = [location_ids]
+
     authorization_data=AuthorizationData(
         account_id=None,
         customer_id=None,
@@ -194,6 +209,6 @@ def get_bing_data(keyword_texts):
 
     authenticate(authorization_data)
         
-    return main(authorization_data, keyword_texts, adinsight_service)
+    return main(authorization_data, keyword_texts, adinsight_service, location_ids, page_url)
 
     

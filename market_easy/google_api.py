@@ -21,14 +21,16 @@ from google.ads.googleads.client import GoogleAdsClient
 from google.ads.googleads.errors import GoogleAdsException
 import pandas as pd
 
+import validators
+
 #Input Customer, Location and Language.
 customer_id = "5651232347"
-location_ids = ["2276"]
+#location_ids = ["2276"]
 language_id = "1001"
 
 #Provide either keyword_texts (as list of strings) or page_url (as string)
 #keyword_texts = ["versicherung", "haftpflichtversicherung", "vollkasko"]
-page_url = ""
+#page_url = ""
 
 #Output = keywords_df
 
@@ -138,11 +140,23 @@ def _map_locations_ids_to_resource_names(client, location_ids):
     ).geo_target_constant_path
     return [build_resource_name(location_id) for location_id in location_ids]
 
-def get_google_data(keyword_texts):
+def get_google_data(keyword_texts, page_url='', location_ids=["2276"]):
     """get data from the google API"""
     # GoogleAdsClient will read the google-ads.yaml configuration file in the
     # home directory if none is specified.
     googleads_client = GoogleAdsClient.load_from_storage("/Users/damjan/neuefische/capstone-project-tem-2/googleads.yaml")
+
+    # Check if keyword_texts is url
+    if (validators.url(keyword_texts)) and (page_url==''):
+        page_url = keyword_texts
+        keyword_texts = ''
+
+    # change location_ids to list
+    if type(location_ids) != list: 
+        location_ids = [location_ids]
+    
+    if (type(keyword_texts) != list) and (keyword_texts != ''): 
+        keyword_texts = [keyword_texts]
 
     try:
         return main(
