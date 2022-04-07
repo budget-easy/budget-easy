@@ -22,7 +22,7 @@ def to_sql(df):
         try:
             df.to_sql(name=table_name, # Name of SQL table
                             con=engine, # Engine or connection
-                            if_exists='append', # Drop the table before inserting new values 
+                            if_exists='replace', # Drop the table before inserting new values 
                             schema='capstone_group2', # Use schmea that was defined earlier
                             index=False, # Write DataFrame index as a column
                             chunksize=5000, # Specify the number of rows in each batch to be written at a time
