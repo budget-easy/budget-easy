@@ -9,6 +9,18 @@ import validators
 # You must provide credentials in auth_helper.py.
 
 def main(authorization_data, keyword_texts, adinsight_service, location_ids, page_url):
+    try:
+        if (validators.url(keyword_texts[0])):# and (page_url==''):
+            page_url = keyword_texts[0]
+            keyword_texts = ''
+    except:
+        pass
+
+    location_ids = str(location_ids)
+
+    # change location_ids to list
+    if type(location_ids) != list: 
+        location_ids = [location_ids]
 
     try:
 
@@ -179,17 +191,10 @@ def main(authorization_data, keyword_texts, adinsight_service, location_ids, pag
         output_status_message(ex)
 
 # Main execution
-def get_bing_data(keyword_texts, page_url='', location_ids=['190']):
+def get_bing_data(keyword_texts, page_url, location_ids):
 
     print("Loading the web service client proxies...")
-    
-    if (validators.url(keyword_texts)) and (page_url==''):
-        page_url = keyword_texts
-        keyword_texts = ''
 
-    # change location_ids to list
-    if type(location_ids) != list: 
-        location_ids = [location_ids]
 
     authorization_data=AuthorizationData(
         account_id=None,
@@ -206,9 +211,8 @@ def get_bing_data(keyword_texts, page_url='', location_ids=['190']):
     )
 
     #print(adinsight_service.soap_client)
-
     authenticate(authorization_data)
-        
+
     return main(authorization_data, keyword_texts, adinsight_service, location_ids, page_url)
 
     

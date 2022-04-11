@@ -102,7 +102,7 @@ def clicks_max_3(df, budget):
     #model.pprint()
 
     # call the solver
-    opt = SolverFactory('cbc', executable='/Users/damjan/neuefische/capstone-project-tem-2/cbc-osx') # replace the executable path by your own
+    opt = SolverFactory('cbc', executable='/Users/damjan/neuefische/capstone-project-tem-2/cbc-osx/cbc') # replace the executable path by your own
     results = opt.solve(model)
 
     # create a list of 0 (not selected keywords) and 1 (selected keywords)

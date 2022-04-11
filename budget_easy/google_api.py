@@ -48,6 +48,20 @@ _DEFAULT_LANGUAGE_ID = "1000"  # language ID for English
 def main(
     client, customer_id, location_ids, language_id, keyword_texts, page_url
 ):
+
+    if (validators.url(keyword_texts[0])): #'http' in keyword_texts[0]:
+        page_url = keyword_texts[0]
+        keyword_texts = ""
+    
+    # change location_ids to list
+    if type(location_ids) != list: 
+        location_ids = [location_ids]
+    
+    if (type(keyword_texts) != list) and (keyword_texts != ''): 
+        keyword_texts = [keyword_texts]
+
+
+
     keyword_plan_idea_service = client.get_service("KeywordPlanIdeaService")
     keyword_competition_level_enum = (
         client.enums.KeywordPlanCompetitionLevelEnum
@@ -145,18 +159,7 @@ def get_google_data(keyword_texts, page_url='', location_ids=["2276"]):
     # GoogleAdsClient will read the google-ads.yaml configuration file in the
     # home directory if none is specified.
     googleads_client = GoogleAdsClient.load_from_storage("/Users/damjan/neuefische/capstone-project-tem-2/googleads.yaml")
-
     # Check if keyword_texts is url
-    if (validators.url(keyword_texts)) and (page_url==''):
-        page_url = keyword_texts
-        keyword_texts = ''
-
-    # change location_ids to list
-    if type(location_ids) != list: 
-        location_ids = [location_ids]
-    
-    if (type(keyword_texts) != list) and (keyword_texts != ''): 
-        keyword_texts = [keyword_texts]
 
     try:
         return main(

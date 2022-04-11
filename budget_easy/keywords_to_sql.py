@@ -55,10 +55,13 @@ def get_data(keyword, page_url, country):
     required: keyword(s), page_url, country"""
     # get location codes for country
     location = get_sql_data(f"SELECT bing_location_id, google_location_id FROM locations WHERE canonical_name = '{country}'")
+    
     # get google and bing data
     google = get_google_data(keyword,page_url,str(location['google_location_id'][0]))
+    
     bing = get_bing_data(keyword,page_url ,str(location['bing_location_id'][0]))
-
+    #bing = ''
+    
     if isinstance(bing, pd.DataFrame):
         to_sql(pd.concat([google, bing]))
     else:
